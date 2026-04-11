@@ -58,6 +58,19 @@ const POSITIVE_KEYWORDS = [
 ];
 
 function Index() {
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [accessCode, setAccessCode] = useState('');
+  const [codeError, setCodeError] = useState(false);
+
+  const handleCodeSubmit = () => {
+    if (accessCode === 'MHNA6699') {
+      setIsUnlocked(true);
+      setCodeError(false);
+    } else {
+      setCodeError(true);
+    }
+  };
+
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
