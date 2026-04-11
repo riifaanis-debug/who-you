@@ -32,14 +32,18 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "بإختصار من أنا - منصور" },
-      { name: "description", content: "صفحة شخصية تفاعلية تعرض نبذة عن منصور، معرض صور، ووسائل التواصل." },
+      { title: "إختصار من أنا" },
+      { name: "description", content: "صفحة شخصية تفاعلية تعرض نبذة عني ، مع معرض مليء بالصور والفيديو" },
       { name: "author", content: "منصور" },
-      { property: "og:title", content: "بإختصار من أنا - منصور" },
-      { property: "og:description", content: "صفحة شخصية تفاعلية تعرض نبذة عن منصور، معرض صور، ووسائل التواصل." },
+      { property: "og:title", content: "إختصار من أنا" },
+      { property: "og:description", content: "صفحة شخصية تفاعلية تعرض نبذة عني ، مع معرض مليء بالصور والفيديو" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "إختصار من أنا" },
+      { name: "twitter:description", content: "صفحة شخصية تفاعلية تعرض نبذة عني ، مع معرض مليء بالصور والفيديو" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/jYTr5ou8o6gflDORAwy76JRAR7n2/social-images/social-1775941799347-WhatsApp_Image_2026-04-12_at_12.09.45_AM.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/jYTr5ou8o6gflDORAwy76JRAR7n2/social-images/social-1775941799347-WhatsApp_Image_2026-04-12_at_12.09.45_AM.webp" },
     ],
     links: [
       {
