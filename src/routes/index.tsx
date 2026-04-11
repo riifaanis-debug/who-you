@@ -235,31 +235,6 @@ ${feedbackText ? `\nتقييماتي للنظرة الخاطفة:${feedbackText}
           }}
         />
 
-        {/* Section: Photo Gallery */}
-        <motion.section 
-          initial={{ y: 40, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true }}
-          className="bg-white rounded-2xl md:rounded-3xl shadow-xl shadow-zinc-200/50 p-4 md:p-8 border border-zinc-100"
-        >
-          <div className="flex items-center gap-2 mb-6">
-            <div className="p-2 bg-amber-50 rounded-xl text-amber-600">
-              <Camera size={20} />
-            </div>
-            <h2 className="text-lg font-bold text-zinc-800">معرض الصور</h2>
-          </div>
-          <div className="grid grid-cols-3 gap-2 md:gap-3">
-            {GALLERY_IMAGES.map((img, idx) => (
-              <button 
-                key={idx}
-                onClick={() => { setCurrentImageIndex(idx); setIsGalleryOpen(true); }}
-                className="aspect-square rounded-xl overflow-hidden hover:opacity-80 transition-opacity"
-              >
-                <img src={img} alt={`صورة ${idx + 1}`} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-              </button>
-            ))}
-          </div>
-        </motion.section>
 
         {/* Section: Listen to my voice */}
         <motion.section 
