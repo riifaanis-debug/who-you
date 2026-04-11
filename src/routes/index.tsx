@@ -58,6 +58,19 @@ const POSITIVE_KEYWORDS = [
 ];
 
 function Index() {
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [accessCode, setAccessCode] = useState('');
+  const [codeError, setCodeError] = useState(false);
+
+  const handleCodeSubmit = () => {
+    if (accessCode === 'MHNA6699') {
+      setIsUnlocked(true);
+      setCodeError(false);
+    } else {
+      setCodeError(true);
+    }
+  };
+
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -148,6 +161,50 @@ ${feedbackText ? `\nتقييماتي للنظرة الخاطفة:${feedbackText}
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isGalleryOpen]);
+
+  if (!isUnlocked) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-zinc-950 px-4" dir="rtl">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 w-full max-w-sm text-center shadow-2xl"
+        >
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-zinc-800 flex items-center justify-center">
+            <Ghost className="w-8 h-8 text-zinc-400" />
+          </div>
+          <h2 className="text-xl font-bold text-zinc-100 mb-2">بإختصار من أنا</h2>
+          <p className="text-zinc-400 text-sm mb-6">الرجاء إدخال رمز المحنة المطلوبة لتتمكن من مشاهدتها</p>
+          <input
+            type="text"
+            value={accessCode}
+            onChange={(e) => { setAccessCode(e.target.value.toUpperCase()); setCodeError(false); }}
+            onKeyDown={(e) => e.key === 'Enter' && handleCodeSubmit()}
+            placeholder="أدخل الرمز هنا..."
+            className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-center text-zinc-100 text-lg tracking-widest placeholder:text-zinc-600 placeholder:tracking-normal placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-zinc-600 mb-3"
+            dir="ltr"
+          />
+          {codeError && (
+            <motion.p
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-red-400 text-xs mb-3 flex items-center justify-center gap-1"
+            >
+              <AlertCircle className="w-3 h-3" />
+              الرمز غير صحيح، حاول مرة أخرى
+            </motion.p>
+          )}
+          <button
+            onClick={handleCodeSubmit}
+            className="w-full bg-zinc-100 text-zinc-900 font-bold rounded-xl py-3 hover:bg-white transition-colors"
+          >
+            دخول
+          </button>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center pb-20">
