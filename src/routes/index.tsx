@@ -36,20 +36,16 @@ const GALLERY_IMAGES = [
 ];
 
 const PEEK_VIDEOS = [
-  "/attachments/76082987-0b19-4806-897d-68551167433c",
-  "/attachments/17150162-8706-476f-8566-562912444988",
-  "/attachments/99245585-8468-450f-9029-770731210967",
-  "/attachments/40447385-4811-409c-9f89-c45474377042",
-  "/attachments/40673327-023a-48d6-953e-52627993079b",
-  "/attachments/43315848-18e4-4d87-937b-941198428359",
-  "/attachments/63079148-5226-444f-8316-015891399818",
-  "/attachments/08611130-802c-471a-8280-5a337775929b",
-  "/attachments/77477610-854e-4731-9257-f70409f69741",
-  "/attachments/57704870-2023-455b-8094-a95782782974",
-  "/attachments/66532454-94c3-4835-8025-055799791974",
-  "/attachments/63442454-94c3-4835-8025-055799791974",
-  "/attachments/55512454-94c3-4835-8025-055799791974",
-  "/attachments/11112454-94c3-4835-8025-055799791974"
+  "/videos/peek-01.mp4",
+  "/videos/peek-02.mp4",
+  "/videos/peek-03.mp4",
+  "/videos/peek-04.mp4",
+  "/videos/peek-05.mp4",
+  "/videos/peek-06.mp4",
+  "/videos/peek-07.mp4",
+  "/videos/peek-08.mp4",
+  "/videos/peek-09.mp4",
+  "/videos/peek-10.mp4",
 ];
 
 const POSITIVE_KEYWORDS = [
