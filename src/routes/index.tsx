@@ -164,44 +164,107 @@ ${feedbackText ? `\nتقييماتي للنظرة الخاطفة:${feedbackText}
 
   if (!isUnlocked) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-zinc-950 px-4" dir="rtl">
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 w-full max-w-sm text-center shadow-2xl"
-        >
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-zinc-800 flex items-center justify-center">
-            <Ghost className="w-8 h-8 text-zinc-400" />
-          </div>
-          <h2 className="text-xl font-bold text-zinc-100 mb-2">بإختصار من أنا</h2>
-          <p className="text-zinc-400 text-sm mb-6">الرجاء إدخال رمز المحنة المطلوبة لتتمكن من مشاهدتها</p>
-          <input
-            type="text"
-            value={accessCode}
-            onChange={(e) => { setAccessCode(e.target.value.toUpperCase()); setCodeError(false); }}
-            onKeyDown={(e) => e.key === 'Enter' && handleCodeSubmit()}
-            placeholder="أدخل الرمز هنا..."
-            className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-center text-zinc-100 text-lg tracking-widest placeholder:text-zinc-600 placeholder:tracking-normal placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-zinc-600 mb-3"
-            dir="ltr"
-          />
-          {codeError && (
-            <motion.p
-              initial={{ opacity: 0, y: -5 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-red-400 text-xs mb-3 flex items-center justify-center gap-1"
+      <div className="min-h-screen flex flex-col" dir="rtl">
+        {/* Top gradient header */}
+        <div className="relative w-full bg-gradient-to-bl from-sky-500 via-blue-600 to-blue-800 overflow-hidden">
+          {/* Decorative circles */}
+          <div className="absolute top-[-60px] left-[-60px] w-52 h-52 rounded-full bg-white/5 blur-sm" />
+          <div className="absolute bottom-[-40px] right-[-40px] w-40 h-40 rounded-full bg-white/5 blur-sm" />
+          <div className="absolute top-10 right-10 w-20 h-20 rounded-full bg-white/5" />
+
+          <div className="relative z-10 flex flex-col items-center justify-center py-16 px-4">
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 200, damping: 15 }}
+              className="w-24 h-24 rounded-full bg-white/15 backdrop-blur-sm border-2 border-white/30 flex items-center justify-center mb-5 shadow-xl"
             >
-              <AlertCircle className="w-3 h-3" />
-              الرمز غير صحيح، حاول مرة أخرى
+              <Ghost className="w-12 h-12 text-white" />
+            </motion.div>
+            <motion.h1
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="text-3xl font-bold text-white mb-2 drop-shadow-md"
+            >
+              بإختصار من أنا
+            </motion.h1>
+            <motion.p
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.35 }}
+              className="text-blue-100 text-sm max-w-xs text-center"
+            >
+              صفحة شخصية خاصة — للدخول يرجى إدخال رمز المحنة
             </motion.p>
-          )}
-          <button
-            onClick={handleCodeSubmit}
-            className="w-full bg-zinc-100 text-zinc-900 font-bold rounded-xl py-3 hover:bg-white transition-colors"
+          </div>
+
+          {/* Wave SVG separator */}
+          <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 100" preserveAspectRatio="none">
+            <path d="M0,60 C360,120 1080,0 1440,60 L1440,100 L0,100 Z" fill="#09090b" />
+          </svg>
+        </div>
+
+        {/* Code input section */}
+        <div className="flex-1 bg-zinc-950 flex items-start justify-center px-4 pt-10">
+          <motion.div
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="w-full max-w-sm"
           >
-            دخول
-          </button>
-        </motion.div>
+            {/* Feature pills */}
+            <div className="flex items-center justify-center gap-3 mb-8">
+              {[
+                { icon: Camera, label: "صور" },
+                { icon: Play, label: "مقاطع" },
+                { icon: Mic, label: "صوت" },
+              ].map((item, i) => (
+                <motion.div
+                  key={item.label}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.6 + i * 0.1 }}
+                  className="flex items-center gap-1.5 bg-zinc-900 border border-zinc-800 rounded-full px-3 py-1.5"
+                >
+                  <item.icon className="w-3.5 h-3.5 text-blue-400" />
+                  <span className="text-zinc-300 text-xs">{item.label}</span>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 shadow-2xl">
+              <p className="text-zinc-400 text-sm mb-4 text-center">أدخل رمز الدخول للمتابعة</p>
+              <input
+                type="text"
+                value={accessCode}
+                onChange={(e) => { setAccessCode(e.target.value.toUpperCase()); setCodeError(false); }}
+                onKeyDown={(e) => e.key === 'Enter' && handleCodeSubmit()}
+                placeholder="أدخل الرمز هنا..."
+                className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-center text-zinc-100 text-lg tracking-widest placeholder:text-zinc-600 placeholder:tracking-normal placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 mb-3"
+                dir="ltr"
+              />
+              {codeError && (
+                <motion.p
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-red-400 text-xs mb-3 flex items-center justify-center gap-1"
+                >
+                  <AlertCircle className="w-3 h-3" />
+                  الرمز غير صحيح، حاول مرة أخرى
+                </motion.p>
+              )}
+              <button
+                onClick={handleCodeSubmit}
+                className="w-full bg-gradient-to-l from-sky-500 to-blue-600 text-white font-bold rounded-xl py-3 hover:from-sky-400 hover:to-blue-500 transition-all shadow-lg shadow-blue-600/20"
+              >
+                دخول
+              </button>
+            </div>
+
+            <p className="text-zinc-600 text-[11px] text-center mt-4">محتوى خاص وسري — لا يمكن الوصول بدون الرمز</p>
+          </motion.div>
+        </div>
       </div>
     );
   }
