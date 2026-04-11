@@ -1,4 +1,5 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 import appCss from "../styles.css?url";
 
@@ -67,5 +68,40 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  useEffect(() => {
+    // Prevent right-click context menu
+    const handleContextMenu = (e: MouseEvent) => e.preventDefault();
+    // Prevent keyboard shortcuts for screenshots/save
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.key === 'PrintScreen' ||
+        (e.ctrlKey && e.key === 's') ||
+        (e.ctrlKey && e.key === 'p') ||
+        (e.ctrlKey && e.shiftKey && e.key === 'S') ||
+        (e.metaKey && e.shiftKey && (e.key === '3' || e.key === '4' || e.key === '5'))
+      ) {
+        e.preventDefault();
+      }
+    };
+    // Blur page when visibility changes (screen recording detection)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        document.body.style.filter = 'blur(20px)';
+      } else {
+        document.body.style.filter = 'none';
+      }
+    };
+
+    document.addEventListener('contextmenu', handleContextMenu);
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('contextmenu', handleContextMenu);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
   return <Outlet />;
 }
