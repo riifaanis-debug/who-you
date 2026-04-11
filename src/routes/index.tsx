@@ -46,6 +46,10 @@ const PEEK_VIDEOS = [
   "/videos/peek-08.mp4",
   "/videos/peek-09.mp4",
   "/videos/peek-10.mp4",
+  "/videos/peek-11.mp4",
+  "/videos/peek-12.mp4",
+  "/videos/peek-13.mp4",
+  "/videos/peek-14.mp4",
 ];
 
 const POSITIVE_KEYWORDS = [
