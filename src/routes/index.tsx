@@ -160,7 +160,7 @@ ${feedbackText ? `\nتقييماتي للنظرة الخاطفة:${feedbackText}
           className="absolute inset-0 z-0"
         >
           <video 
-            src="/attachments/78929759-4290-449e-862d-034638791974"
+            src="/hero-video.mp4"
             autoPlay loop muted playsInline
             className="w-full h-full object-cover pointer-events-none"
             style={{ filter: 'brightness(0.8)' }}
