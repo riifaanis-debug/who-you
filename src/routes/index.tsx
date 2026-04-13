@@ -60,6 +60,8 @@ const POSITIVE_KEYWORDS = [
 ];
 
 function Index() {
+  const { user, loading: authLoading, signOut } = useAuth();
+  const navTo = useNavigate();
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [accessCode, setAccessCode] = useState('');
   const [codeError, setCodeError] = useState(false);
