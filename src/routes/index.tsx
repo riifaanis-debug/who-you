@@ -166,9 +166,22 @@ ${feedbackText ? `\nتقييماتي للنظرة الخاطفة:${feedbackText}
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isGalleryOpen]);
 
-  if (!isUnlocked) {
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navTo({ to: '/login' });
+    }
+  }, [authLoading, user, navTo]);
+
+  if (authLoading || !user) {
     return (
-      <div className="min-h-screen flex flex-col" dir="rtl">
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <div className="text-zinc-400">جاري التحميل...</div>
+      </div>
+    );
+  }
+
+  if (!isUnlocked) {
         {/* Top gradient header */}
         <div className="relative w-full bg-gradient-to-bl from-sky-500 via-blue-600 to-blue-800 overflow-hidden">
           {/* Decorative circles */}
