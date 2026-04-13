@@ -1,11 +1,13 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect, useRef, type ReactNode, type ChangeEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   User, MapPin, Calendar, Weight, Ruler, Sparkles, Heart, Camera, X, 
   ChevronLeft, ChevronRight, ChevronDown, Send, MessageCircle, Map as MapIcon,
-  Mic, Play, Pause, Volume2, Upload, Ghost, AlertCircle, CheckCircle
+  Mic, Play, Pause, Volume2, Upload, Ghost, AlertCircle, CheckCircle, LogOut
 } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
 
 export const Route = createFileRoute("/")({
   component: Index,
