@@ -182,7 +182,8 @@ ${feedbackText ? `\nتقييماتي للنظرة الخاطفة:${feedbackText}
   }
 
   if (!isUnlocked) {
-        {/* Top gradient header */}
+    return (
+      <div className="min-h-screen flex flex-col" dir="rtl">
         <div className="relative w-full bg-gradient-to-bl from-sky-500 via-blue-600 to-blue-800 overflow-hidden">
           {/* Decorative circles */}
           <div className="absolute top-[-60px] left-[-60px] w-52 h-52 rounded-full bg-white/5 blur-sm" />
