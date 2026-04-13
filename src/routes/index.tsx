@@ -1,11 +1,13 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect, useRef, type ReactNode, type ChangeEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   User, MapPin, Calendar, Weight, Ruler, Sparkles, Heart, Camera, X, 
   ChevronLeft, ChevronRight, ChevronDown, Send, MessageCircle, Map as MapIcon,
-  Mic, Play, Pause, Volume2, Upload, Ghost, AlertCircle, CheckCircle
+  Mic, Play, Pause, Volume2, Upload, Ghost, AlertCircle, CheckCircle, LogOut
 } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -58,6 +60,8 @@ const POSITIVE_KEYWORDS = [
 ];
 
 function Index() {
+  const { user, loading: authLoading, signOut } = useAuth();
+  const navTo = useNavigate();
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [accessCode, setAccessCode] = useState('');
   const [codeError, setCodeError] = useState(false);
@@ -162,10 +166,24 @@ ${feedbackText ? `\nتقييماتي للنظرة الخاطفة:${feedbackText}
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isGalleryOpen]);
 
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navTo({ to: '/login' });
+    }
+  }, [authLoading, user, navTo]);
+
+  if (authLoading || !user) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <div className="text-zinc-400">جاري التحميل...</div>
+      </div>
+    );
+  }
+
   if (!isUnlocked) {
     return (
       <div className="min-h-screen flex flex-col" dir="rtl">
-        {/* Top gradient header */}
         <div className="relative w-full bg-gradient-to-bl from-sky-500 via-blue-600 to-blue-800 overflow-hidden">
           {/* Decorative circles */}
           <div className="absolute top-[-60px] left-[-60px] w-52 h-52 rounded-full bg-white/5 blur-sm" />
@@ -271,6 +289,16 @@ ${feedbackText ? `\nتقييماتي للنظرة الخاطفة:${feedbackText}
 
   return (
     <div className="min-h-screen flex flex-col items-center pb-20">
+      {/* Logout button */}
+      <div className="fixed top-4 left-4 z-50">
+        <button
+          onClick={async () => { await signOut(); navTo({ to: '/login' }); }}
+          className="flex items-center gap-1.5 bg-black/50 backdrop-blur-md text-white/70 hover:text-white rounded-full px-3 py-1.5 text-xs transition-all"
+        >
+          <LogOut className="w-3 h-3" />
+          خروج
+        </button>
+      </div>
       {/* Hero Section */}
       <header className="w-full aspect-square md:aspect-video md:h-[60vh] relative flex items-center justify-center overflow-hidden bg-zinc-900">
         <motion.div 
@@ -489,16 +517,52 @@ ${feedbackText ? `\nتقييماتي للنظرة الخاطفة:${feedbackText}
                 </div>
 
                 <div className="mt-8">
-                  <a 
-                    href={isFormValid ? getTelegramUrl() : '#'}
-                    target={isFormValid ? "_blank" : undefined}
-                    rel="noopener noreferrer"
-                    onClick={(e) => {
+                  <button 
+                    onClick={async (e) => {
                       if (!isFormValid) {
-                        e.preventDefault();
                         showToast('يرجى ملء جميع الحقول وإرفاق الصورة أولاً', 'error');
-                      } else {
+                        return;
+                      }
+                      
+                      try {
+                        // Upload image
+                        let imageUrl: string | null = null;
+                        if (selectedFile && user) {
+                          const fileExt = selectedFile.name.split('.').pop();
+                          const filePath = `${user.id}/${Date.now()}.${fileExt}`;
+                          const { error: uploadError } = await supabase.storage
+                            .from('attachments')
+                            .upload(filePath, selectedFile);
+                          if (!uploadError) {
+                            const { data: urlData } = supabase.storage
+                              .from('attachments')
+                              .getPublicUrl(filePath);
+                            imageUrl = urlData.publicUrl;
+                          }
+                        }
+
+                        // Save submission
+                        const { error: subError } = await supabase.from('submissions').insert({
+                          user_id: user!.id,
+                          name: formData.name,
+                          age: formData.age,
+                          city: formData.city,
+                          district: formData.district,
+                          snapchat: formData.snapchat,
+                          orientation: formData.orientation,
+                          image_url: imageUrl,
+                          peek_feedback: peekFeedback,
+                        });
+
+                        if (subError) throw subError;
+
+                        // Open Telegram
+                        window.open(getTelegramUrl(), '_blank');
+                        showToast('تم حفظ بياناتك بنجاح!', 'success');
                         setTimeout(() => setIsContactModalOpen(false), 100);
+                      } catch (err) {
+                        console.error(err);
+                        showToast('حدث خطأ أثناء الحفظ', 'error');
                       }
                     }}
                     className={`w-full py-3.5 rounded-xl font-bold text-sm md:text-base transition-all flex items-center justify-center gap-3 ${
@@ -509,7 +573,7 @@ ${feedbackText ? `\nتقييماتي للنظرة الخاطفة:${feedbackText}
                   >
                     <Send size={18} />
                     بدأ التواصل والانسجام
-                  </a>
+                  </button>
                 </div>
               </div>
             </motion.div>
