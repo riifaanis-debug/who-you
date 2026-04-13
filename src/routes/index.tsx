@@ -507,16 +507,52 @@ ${feedbackText ? `\nتقييماتي للنظرة الخاطفة:${feedbackText}
                 </div>
 
                 <div className="mt-8">
-                  <a 
-                    href={isFormValid ? getTelegramUrl() : '#'}
-                    target={isFormValid ? "_blank" : undefined}
-                    rel="noopener noreferrer"
-                    onClick={(e) => {
+                  <button 
+                    onClick={async (e) => {
                       if (!isFormValid) {
-                        e.preventDefault();
                         showToast('يرجى ملء جميع الحقول وإرفاق الصورة أولاً', 'error');
-                      } else {
+                        return;
+                      }
+                      
+                      try {
+                        // Upload image
+                        let imageUrl: string | null = null;
+                        if (selectedFile && user) {
+                          const fileExt = selectedFile.name.split('.').pop();
+                          const filePath = `${user.id}/${Date.now()}.${fileExt}`;
+                          const { error: uploadError } = await supabase.storage
+                            .from('attachments')
+                            .upload(filePath, selectedFile);
+                          if (!uploadError) {
+                            const { data: urlData } = supabase.storage
+                              .from('attachments')
+                              .getPublicUrl(filePath);
+                            imageUrl = urlData.publicUrl;
+                          }
+                        }
+
+                        // Save submission
+                        const { error: subError } = await supabase.from('submissions').insert({
+                          user_id: user!.id,
+                          name: formData.name,
+                          age: formData.age,
+                          city: formData.city,
+                          district: formData.district,
+                          snapchat: formData.snapchat,
+                          orientation: formData.orientation,
+                          image_url: imageUrl,
+                          peek_feedback: peekFeedback,
+                        });
+
+                        if (subError) throw subError;
+
+                        // Open Telegram
+                        window.open(getTelegramUrl(), '_blank');
+                        showToast('تم حفظ بياناتك بنجاح!', 'success');
                         setTimeout(() => setIsContactModalOpen(false), 100);
+                      } catch (err) {
+                        console.error(err);
+                        showToast('حدث خطأ أثناء الحفظ', 'error');
                       }
                     }}
                     className={`w-full py-3.5 rounded-xl font-bold text-sm md:text-base transition-all flex items-center justify-center gap-3 ${
@@ -527,7 +563,7 @@ ${feedbackText ? `\nتقييماتي للنظرة الخاطفة:${feedbackText}
                   >
                     <Send size={18} />
                     بدأ التواصل والانسجام
-                  </a>
+                  </button>
                 </div>
               </div>
             </motion.div>
