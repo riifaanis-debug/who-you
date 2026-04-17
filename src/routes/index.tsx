@@ -352,7 +352,7 @@ ${feedbackText ? `\nتقييماتي للنظرة الخاطفة:${feedbackText}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8">
             <div className="space-y-4 md:space-y-6">
               <ProfileItem icon={<div className="p-2 bg-blue-50 rounded-xl text-blue-600"><User size={18} /></div>} label="الاسم" value="منصور" />
-              <ProfileItem icon={<div className="p-2 bg-emerald-50 rounded-xl text-emerald-600"><MapPin size={18} /></div>} label="الموقع" value="تبوك وزائر الطائف حي الوسام" />
+              <ProfileItem icon={<div className="p-2 bg-emerald-50 rounded-xl text-emerald-600"><MapPin size={18} /></div>} label="الموقع" value="من الدمام / وزاير الطايف - حي الوسام" />
               <ProfileItem icon={<div className="p-2 bg-amber-50 rounded-xl text-amber-600"><Calendar size={18} /></div>} label="العمر" value="24 سنة" />
             </div>
             <div className="space-y-4 md:space-y-6">
